@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS // Human Evolution Initiative</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #050A0E;
+    --dark: #0A1520;
+    --steel: #1A2A3A;
+    --cyan: #00F5FF;
+    --cyan-dim: #00AACC;
+    --magenta: #FF006E;
+    --titanium: #8A9BAE;
+    --chrome: #E8F4F8;
+    --glow-cyan: 0 0 20px rgba(0,245,255,0.5), 0 0 40px rgba(0,245,255,0.2);
+    --glow-magenta: 0 0 20px rgba(255,0,110,0.5), 0 0 40px rgba(255,0,110,0.2);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--chrome);
+    font-family: 'Share Tech Mono', monospace;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* ── SCANLINE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,245,255,0.015) 2px,
+      rgba(0,245,255,0.015) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+    animation: scanMove 8s linear infinite;
+  }
+
+  @keyframes scanMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100px; }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 4rem;
+    background: rgba(5,10,14,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,245,255,0.15);
+  }
+
+  .nav-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--cyan);
+    letter-spacing: 0.3em;
+    text-shadow: var(--glow-cyan);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--magenta); }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--titanium);
+    text-decoration: none;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: color 0.2s, text-shadow 0.2s;
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--cyan);
+    transition: width 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--cyan); text-shadow: var(--glow-cyan); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cta {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--black);
+    background: var(--cyan);
+    border: none;
+    padding: 0.55rem 1.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: crosshair;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+
+  .nav-cta:hover { background: var(--magenta); box-shadow: var(--glow-magenta); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Circuit background */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 70% 50%, rgba(0,245,255,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 30% 30%, rgba(255,0,110,0.03) 0%, transparent 50%);
+  }
+
+  .hero-bg svg {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    opacity: 0.07;
+  }
+
+  /* Animated scan beam */
+  .scan-beam {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    box-shadow: 0 0 20px var(--cyan);
+    animation: scanBeam 4s ease-in-out infinite;
+    opacity: 0.6;
+  }
+
+  @keyframes scanBeam {
+    0% { top: 0%; opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.6; }
+    100% { top: 100%; opacity: 0; }
+  }
+
+  .hero-content { position: relative; z-index: 2; }
+
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: var(--magenta);
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 2rem; height: 1px;
+    background: var(--magenta);
+    box-shadow: var(--glow-magenta);
+  }
+
+  h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2.8rem, 5vw, 5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  .glitch {
+    display: block;
+    color: var(--chrome);
+    position: relative;
+  }
+
+  .glitch::before, .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+  }
+
+  .glitch::before {
+    color: var(--cyan);
+    clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+    animation: glitch1 3s infinite;
+    text-shadow: -2px 0 var(--magenta);
+  }
+
+  .glitch::after {
+    color: var(--magenta);
+    clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+    animation: glitch2 3s infinite;
+    text-shadow: 2px 0 var(--cyan);
+  }
+
+  @keyframes glitch1 {
+    0%, 90%, 100% { transform: translateX(0); opacity: 0; }
+    92% { transform: translateX(-4px); opacity: 1; }
+    94% { transform: translateX(4px); opacity: 1; }
+    96% { transform: translateX(0); opacity: 0; }
+  }
+
+  @keyframes glitch2 {
+    0%, 91%, 100% { transform: translateX(0); opacity: 0; }
+    93% { transform: translateX(4px); opacity: 1; }
+    95% { transform: translateX(-4px); opacity: 1; }
+    97% { transform: translateX(0); opacity: 0; }
+  }
+
+  .accent-word { color: var(--cyan); text-shadow: var(--glow-cyan); }
+
+  .hero-sub {
+    font-size: 0.95rem;
+    color: var(--titanium);
+    line-height: 1.8;
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-actions { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+
+  .btn-primary {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--black);
+    background: var(--cyan);
+    border: none;
+    padding: 0.9rem 2.4rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: crosshair;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    box-shadow: var(--glow-cyan);
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .btn-primary:hover { background: var(--magenta); box-shadow: var(--glow-magenta); }
+
+  .btn-secondary {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--cyan);
+    background: transparent;
+    border: 1px solid rgba(0,245,255,0.4);
+    padding: 0.9rem 2rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: crosshair;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .btn-secondary:hover { border-color: var(--cyan); box-shadow: var(--glow-cyan); }
+
+  /* ── HERO VISUAL ── */
+  .hero-visual {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .hud-circle {
+    width: clamp(320px, 38vw, 520px);
+    aspect-ratio: 1;
+    position: relative;
+  }
+
+  .hud-circle svg { width: 100%; height: 100%; }
+
+  .hud-ring {
+    transform-origin: 50% 50%;
+    animation: spin 20s linear infinite;
+  }
+
+  .hud-ring-2 {
+    transform-origin: 50% 50%;
+    animation: spin 12s linear infinite reverse;
+  }
+
+  .hud-ring-3 {
+    transform-origin: 50% 50%;
+    animation: spin 30s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .pulse-core {
+    animation: pulseCore 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseCore {
+    0%, 100% { opacity: 0.7; r: 40; }
+    50% { opacity: 1; r: 46; }
+  }
+
+  /* Stats row */
+  .hero-stats {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(0,245,255,0.1);
+  }
+
+  .stat-item {}
+  .stat-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--cyan);
+    text-shadow: var(--glow-cyan);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--titanium);
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
+  /* ── SECTIONS SHARED ── */
+  section { padding: 7rem 4rem; position: relative; }
+
+  .section-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.5em;
+    color: var(--magenta);
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .section-body {
+    color: var(--titanium);
+    line-height: 1.8;
+    max-width: 560px;
+    font-size: 0.9rem;
+  }
+
+  /* ── AUGMENTATION SECTION ── */
+  #augment {
+    background: var(--dark);
+    border-top: 1px solid rgba(0,245,255,0.08);
+    border-bottom: 1px solid rgba(0,245,255,0.08);
+  }
+
+  .augment-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 6rem;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .aug-features {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+    margin-top: 2.5rem;
+  }
+
+  .aug-feature {
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+    padding: 1.2rem;
+    border: 1px solid rgba(0,245,255,0.08);
+    background: rgba(0,245,255,0.02);
+    transition: all 0.3s;
+    cursor: crosshair;
+  }
+
+  .aug-feature:hover {
+    border-color: rgba(0,245,255,0.3);
+    background: rgba(0,245,255,0.05);
+    box-shadow: inset 0 0 20px rgba(0,245,255,0.05);
+  }
+
+  .aug-icon {
+    flex-shrink: 0;
+    width: 44px; height: 44px;
+    border: 1px solid var(--cyan);
+    display: grid;
+    place-items: center;
+    font-size: 1.2rem;
+    color: var(--cyan);
+    box-shadow: var(--glow-cyan);
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  }
+
+  .aug-text h3 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    color: var(--chrome);
+  }
+
+  .aug-text p { font-size: 0.8rem; color: var(--titanium); line-height: 1.6; }
+
+  /* Body diagram */
+  .body-diagram {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .body-diagram svg { width: 100%; max-width: 400px; }
+
+  /* ── SPECS TABLE ── */
+  #specs {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 7rem 4rem;
+  }
+
+  .specs-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+    margin-bottom: 4rem;
+  }
+
+  .specs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(0,245,255,0.1);
+    border: 1px solid rgba(0,245,255,0.1);
+  }
+
+  .spec-card {
+    background: var(--black);
+    padding: 2rem 1.8rem;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .spec-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--cyan);
+    transition: height 0.3s;
+  }
+
+  .spec-card:hover { background: rgba(0,245,255,0.03); }
+  .spec-card:hover::before { height: 100%; }
+
+  .spec-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--cyan);
+    text-shadow: var(--glow-cyan);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .spec-unit {
+    font-size: 1rem;
+    color: var(--titanium);
+  }
+
+  .spec-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--chrome);
+    margin-bottom: 0.5rem;
+  }
+
+  .spec-desc { font-size: 0.75rem; color: var(--titanium); line-height: 1.6; }
+
+  /* ── PHASES TIMELINE ── */
+  #phases {
+    background: var(--dark);
+    border-top: 1px solid rgba(255,0,110,0.08);
+  }
+
+  .phases-inner { max-width: 1200px; margin: 0 auto; }
+
+  .phases-header { text-align: center; margin-bottom: 5rem; }
+
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 28px; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), var(--magenta), var(--cyan), transparent);
+    opacity: 0.4;
+  }
+
+  .phase-item {
+    padding: 0 1.5rem;
+    padding-top: 4rem;
+    position: relative;
+    text-align: center;
+  }
+
+  .phase-dot {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px; height: 16px;
+    background: var(--black);
+    border: 2px solid var(--cyan);
+    box-shadow: var(--glow-cyan);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  }
+
+  .phase-dot.active { background: var(--cyan); }
+  .phase-dot.upcoming { border-color: var(--titanium); box-shadow: none; }
+
+  .phase-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    color: var(--magenta);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .phase-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--chrome);
+    margin-bottom: 0.7rem;
+  }
+
+  .phase-desc { font-size: 0.75rem; color: var(--titanium); line-height: 1.7; }
+
+  /* ── CTA SECTION ── */
+  #enlist {
+    text-align: center;
+    padding: 8rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #enlist::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(0,245,255,0.05) 0%, transparent 70%);
+  }
+
+  .cta-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 900;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .cta-body {
+    color: var(--titanium);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    max-width: 500px;
+    margin: 0 auto 2.5rem;
+    position: relative;
+  }
+
+  .cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
+
+  .terminal-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--cyan);
+    border: 1px solid rgba(0,245,255,0.3);
+    padding: 0.4rem 1rem;
+    margin-bottom: 2rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid rgba(0,245,255,0.1);
+    padding: 2rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--dark);
+  }
+
+  footer p { font-size: 0.7rem; color: var(--titanium); letter-spacing: 0.1em; }
+  footer span { color: var(--cyan); }
+
+  /* ── CORNER DECORATORS ── */
+  .corner-deco {
+    position: absolute;
+    width: 24px; height: 24px;
+    pointer-events: none;
+  }
+  .corner-deco.tl { top: 1rem; left: 1rem; border-top: 1px solid var(--cyan); border-left: 1px solid var(--cyan); }
+  .corner-deco.tr { top: 1rem; right: 1rem; border-top: 1px solid var(--cyan); border-right: 1px solid var(--cyan); }
+  .corner-deco.bl { bottom: 1rem; left: 1rem; border-bottom: 1px solid var(--cyan); border-left: 1px solid var(--cyan); }
+  .corner-deco.br { bottom: 1rem; right: 1rem; border-bottom: 1px solid var(--cyan); border-right: 1px solid var(--cyan); }
+
+  /* ── TYPING CURSOR ── */
+  .cursor {
+    display: inline-block;
+    width: 2px; height: 1em;
+    background: var(--cyan);
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 6rem 1.5rem 3rem; text-align: center; }
+    .hero-sub { margin: 0 auto 2rem; }
+    .hero-actions { justify-content: center; }
+    .hero-stats { justify-content: center; }
+    .hero-visual { margin-top: 2rem; }
+    .hud-circle { width: 260px; }
+    section { padding: 5rem 1.5rem; }
+    #specs { padding: 5rem 1.5rem; }
+    .augment-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .specs-header { grid-template-columns: 1fr; }
+    .specs-grid { grid-template-columns: 1fr 1fr; }
+    .timeline { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .timeline::before { display: none; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+
+  @media (max-width: 500px) {
+    .specs-grid { grid-template-columns: 1fr; }
+    .timeline { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; }
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">NEX<span>US</span></a>
+  <ul class="nav-links">
+    <li><a href="#augment">Augments</a></li>
+    <li><a href="#specs">Specs</a></li>
+    <li><a href="#phases">Phases</a></li>
+    <li><a href="#enlist">Enlist</a></li>
+  </ul>
+  <button class="nav-cta">Initialize</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <!-- Circuit SVG -->
+    <svg viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="#00F5FF" fill="none" stroke-width="0.5">
+        <path d="M0 450 L200 450 L200 300 L400 300 L400 150 L700 150"/>
+        <path d="M1400 200 L1100 200 L1100 350 L900 350 L900 500 L700 500"/>
+        <path d="M200 450 L200 600 L500 600 L500 750 L800 750"/>
+        <path d="M1100 350 L1100 600 L800 600"/>
+        <circle cx="200" cy="450" r="4" fill="#00F5FF"/>
+        <circle cx="400" cy="300" r="4" fill="#00F5FF"/>
+        <circle cx="900" cy="350" r="4" fill="#FF006E"/>
+        <circle cx="1100" cy="200" r="4" fill="#00F5FF"/>
+        <circle cx="500" cy="600" r="4" fill="#FF006E"/>
+        <rect x="690" y="140" width="20" height="20" fill="none" stroke="#00F5FF"/>
+        <rect x="890" y="340" width="20" height="20" fill="none" stroke="#FF006E"/>
+        <!-- Data paths -->
+        <path d="M0 100 L100 100 L100 200 L300 200" stroke-dasharray="5 10"/>
+        <path d="M1400 700 L1200 700 L1200 550 L1000 550" stroke-dasharray="5 10"/>
+        <path d="M400 900 L400 750 L600 750 L600 650" stroke-dasharray="5 10" stroke="#FF006E"/>
+      </g>
+    </svg>
+  </div>
+  <div class="scan-beam"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Human Evolution Initiative</div>
+    <h1>
+      <span class="glitch" data-text="REDEFINE">REDEFINE</span>
+      <span class="accent-word">HUMAN</span>
+      <span style="display:block;font-size:0.7em;color:var(--titanium);font-weight:300;letter-spacing:0.05em">POTENTIAL</span>
+    </h1>
+    <p class="hero-sub">
+      NEXUS integrates next-generation cybernetic augmentations directly into human biology — enhancing strength, cognition, and perception beyond natural limits.<span class="cursor"></span>
+    </p>
+    <div class="hero-actions">
+      <a href="#enlist" class="btn-primary">Begin Augmentation</a>
+      <a href="#specs" class="btn-secondary">View Specs</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-value">847%</div>
+        <div class="stat-label">Strength Gain</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">12ms</div>
+        <div class="stat-label">Neural Latency</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">∞</div>
+        <div class="stat-label">Uptime</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hud-circle">
+      <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glow2">
+            <feGaussianBlur stdDeviation="6" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Outer decorative ring -->
+        <circle class="hud-ring" cx="250" cy="250" r="230" fill="none" stroke="#1A2A3A" stroke-width="1"
+          stroke-dasharray="8 4"/>
+
+        <!-- Dashed rotating ring -->
+        <circle class="hud-ring-2" cx="250" cy="250" r="200" fill="none" stroke="#00F5FF" stroke-width="0.8"
+          stroke-dasharray="40 10 10 10" filter="url(#glow)"/>
+
+        <!-- Segmented ring -->
+        <circle class="hud-ring-3" cx="250" cy="250" r="170" fill="none" stroke="#FF006E" stroke-width="1.2"
+          stroke-dasharray="60 120 20 60" filter="url(#glow)"/>
+
+        <!-- Static reference rings -->
+        <circle cx="250" cy="250" r="140" fill="none" stroke="#1A2A3A" stroke-width="1"/>
+        <circle cx="250" cy="250" r="100" fill="none" stroke="rgba(0,245,255,0.2)" stroke-width="1"/>
+
+        <!-- Crosshairs -->
+        <line x1="250" y1="110" x2="250" y2="160" stroke="#00F5FF" stroke-width="1" opacity="0.4"/>
+        <line x1="250" y1="340" x2="250" y2="390" stroke="#00F5FF" stroke-width="1" opacity="0.4"/>
+        <line x1="110" y1="250" x2="160" y2="250" stroke="#00F5FF" stroke-width="1" opacity="0.4"/>
+        <line x1="340" y1="250" x2="390" y2="250" stroke="#00F5FF" stroke-width="1" opacity="0.4"/>
+
+        <!-- Diagonal ticks -->
+        <line x1="170" y1="170" x2="188" y2="188" stroke="#FF006E" stroke-width="1" opacity="0.5"/>
+        <line x1="330" y1="170" x2="312" y2="188" stroke="#FF006E" stroke-width="1" opacity="0.5"/>
+        <line x1="170" y1="330" x2="188" y2="312" stroke="#FF006E" stroke-width="1" opacity="0.5"/>
+        <line x1="330" y1="330" x2="312" y2="312" stroke="#FF006E" stroke-width="1" opacity="0.5"/>
+
+        <!-- Data arc -->
+        <path d="M130 250 A120 120 0 0 1 370 250" fill="none" stroke="#00F5FF" stroke-width="2" opacity="0.15"/>
+
+        <!-- Core glow -->
+        <circle class="pulse-core" cx="250" cy="250" r="40" fill="rgba(0,245,255,0.05)" stroke="#00F5FF" stroke-width="1.5" filter="url(#glow2)"/>
+        <circle cx="250" cy="250" r="20" fill="rgba(0,245,255,0.1)" stroke="#00F5FF" stroke-width="2" filter="url(#glow2)"/>
+        <circle cx="250" cy="250" r="6" fill="#00F5FF" filter="url(#glow2)"/>
+
+        <!-- HUD labels -->
+        <text x="258" y="114" fill="#00F5FF" font-family="Share Tech Mono" font-size="10" opacity="0.7">N</text>
+        <text x="258" y="397" fill="#00F5FF" font-family="Share Tech Mono" font-size="10" opacity="0.7">S</text>
+        <text x="103" y="254" fill="#00F5FF" font-family="Share Tech Mono" font-size="10" opacity="0.7">W</text>
+        <text x="386" y="254" fill="#00F5FF" font-family="Share Tech Mono" font-size="10" opacity="0.7">E</text>
+
+        <!-- Data readouts -->
+        <text x="290" y="170" fill="#FF006E" font-family="Share Tech Mono" font-size="9" opacity="0.8">SYS: ONLINE</text>
+        <text x="290" y="184" fill="#FF006E" font-family="Share Tech Mono" font-size="9" opacity="0.8">PWR: 98.7%</text>
+        <text x="130" y="330" fill="#00F5FF" font-family="Share Tech Mono" font-size="9" opacity="0.8">LAT: 12ms</text>
+        <text x="130" y="344" fill="#00F5FF" font-family="Share Tech Mono" font-size="9" opacity="0.8">SIG: 847</text>
+
+        <!-- Small decorative squares -->
+        <rect x="246" y="118" width="8" height="8" fill="#00F5FF" opacity="0.5" transform="rotate(45 250 122)"/>
+        <rect x="246" y="374" width="8" height="8" fill="#00F5FF" opacity="0.5" transform="rotate(45 250 378)"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="corner-deco tl"></div>
+  <div class="corner-deco tr"></div>
+  <div class="corner-deco bl"></div>
+  <div class="corner-deco br"></div>
+</section>
+
+<!-- AUGMENTATION -->
+<section id="augment">
+  <div class="augment-grid">
+    <div>
+      <div class="section-eyebrow reveal">// Core Systems</div>
+      <h2 class="section-title reveal">Augmentation<br><span class="accent-word">Modules</span></h2>
+      <p class="section-body reveal">Each module is precision-engineered for seamless bio-integration. Titanium-alloy scaffolding interfaces directly with your nervous system, delivering real-time performance data to your neural HUD.</p>
+
+      <div class="aug-features">
+        <div class="aug-feature reveal">
+          <div class="aug-icon">⚡</div>
+          <div class="aug-text">
+            <h3>NeuroLink Core</h3>
+            <p>Direct brain-to-system interface enabling sub-12ms response times. Full sensory overlay with AR targeting and tactical data streams.</p>
+          </div>
+        </div>
+        <div class="aug-feature reveal">
+          <div class="aug-icon">💀</div>
+          <div class="aug-text">
+            <h3>ExoFrame Skeleton</h3>
+            <p>Carbon-titanium exoskeletal reinforcement rated to 900kg static load. Self-repairing nano-mesh heals micro-fractures in 4 hours.</p>
+          </div>
+        </div>
+        <div class="aug-feature reveal">
+          <div class="aug-icon">👁</div>
+          <div class="aug-text">
+            <h3>Ocular Suite X7</h3>
+            <p>4K thermal-optical hybrid vision with 300× digital zoom, EM spectrum scanning, and integrated facial recognition AI.</p>
+          </div>
+        </div>
+        <div class="aug-feature reveal">
+          <div class="aug-icon">🫁</div>
+          <div class="aug-text">
+            <h3>BioFusion Organs</h3>
+            <p>Synthetic organ cluster providing 340% increased oxygenation capacity. Zero maintenance for 50,000 operational hours.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body diagram -->
+    <div class="body-diagram reveal">
+      <svg viewBox="0 0 360 600" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="glowBlue">
+            <feGaussianBlur stdDeviation="4" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glowPink">
+            <feGaussianBlur stdDeviation="3" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Body silhouette -->
+        <g fill="rgba(26,42,58,0.8)" stroke="#1A2A3A" stroke-width="1.5">
+          <!-- Head -->
+          <ellipse cx="180" cy="70" rx="42" ry="52"/>
+          <!-- Torso -->
+          <rect x="128" y="118" width="104" height="160" rx="8"/>
+          <!-- Left arm -->
+          <rect x="80" y="122" width="44" height="120" rx="8"/>
+          <!-- Right arm -->
+          <rect x="236" y="122" width="44" height="120" rx="8"/>
+          <!-- Left leg -->
+          <rect x="128" y="274" width="46" height="180" rx="8"/>
+          <!-- Right leg -->
+          <rect x="186" y="274" width="46" height="180" rx="8"/>
+          <!-- Left hand -->
+          <rect x="78" y="238" width="46" height="30" rx="4"/>
+          <!-- Right hand -->
+          <rect x="236" y="238" width="46" height="30" rx="4"/>
+          <!-- Left foot -->
+          <rect x="122" y="448" width="52" height="24" rx="4"/>
+          <!-- Right foot -->
+          <rect x="186" y="448" width="52" height="24" rx="4"/>
+        </g>
+
+        <!-- Augmentation overlays -->
+        <!-- Head/ocular -->
+        <g filter="url(#glowBlue)">
+          <ellipse cx="165" cy="65" rx="10" ry="8" fill="none" stroke="#00F5FF" stroke-width="1.5"/>
+          <circle cx="165" cy="65" r="4" fill="#00F5FF" opacity="0.8"/>
+          <line x1="175" y1="65" x2="195" y2="58" stroke="#00F5FF" stroke-width="0.8" stroke-dasharray="3 2"/>
+          <text x="197" y="62" fill="#00F5FF" font-family="Share Tech Mono" font-size="9">OCU-X7</text>
+        </g>
+
+        <!-- Neural spine -->
+        <g filter="url(#glowBlue)">
+          <line x1="180" y1="125" x2="180" y2="275" stroke="#00F5FF" stroke-width="2" stroke-dasharray="6 3"/>
+          <circle cx="180" cy="155" r="5" fill="#00F5FF" opacity="0.8"/>
+          <circle cx="180" cy="190" r="5" fill="#00F5FF" opacity="0.8"/>
+          <circle cx="180" cy="225" r="5" fill="#00F5FF" opacity="0.8"/>
+          <circle cx="180" cy="260" r="5" fill="#00F5FF" opacity="0.8"/>
+          <line x1="180" y1="190" x2="230" y2="175" stroke="#00F5FF" stroke-width="0.8" stroke-dasharray="3 2"/>
+          <text x="232" y="179" fill="#00F5FF" font-family="Share Tech Mono" font-size="9">NEURO</text>
+        </g>
+
+        <!-- Core/BioFusion -->
+        <g filter="url(#glowPink)">
+          <rect x="152" y="158" width="56" height="50" rx="4" fill="rgba(255,0,110,0.08)" stroke="#FF006E" stroke-width="1.2"/>
+          <text x="163" y="178" fill="#FF006E" font-family="Share Tech Mono" font-size="8">BIO</text>
+          <text x="163" y="191" fill="#FF006E" font-family="Share Tech Mono" font-size="8">CORE</text>
+          <line x1="152" y1="183" x2="110" y2="175" stroke="#FF006E" stroke-width="0.8" stroke-dasharray="3 2"/>
+          <text x="60" y="179" fill="#FF006E" font-family="Share Tech Mono" font-size="9">FUSION</text>
+        </g>
+
+        <!-- Left arm augment -->
+        <g filter="url(#glowBlue)">
+          <rect x="84" y="155" width="36" height="80" rx="4" fill="none" stroke="#00F5FF" stroke-width="1"
+            stroke-dasharray="4 3"/>
+          <line x1="84" y1="195" x2="60" y2="195" stroke="#00F5FF" stroke-width="0.8"/>
+          <text x="28" y="199" fill="#00F5FF" font-family="Share Tech Mono" font-size="8">EXO</text>
+        </g>
+
+        <!-- Right arm augment -->
+        <g filter="url(#glowBlue)">
+          <rect x="240" y="155" width="36" height="80" rx="4" fill="none" stroke="#00F5FF" stroke-width="1"
+            stroke-dasharray="4 3"/>
+          <line x1="276" y1="195" x2="300" y2="195" stroke="#00F5FF" stroke-width="0.8"/>
+          <text x="302" y="199" fill="#00F5FF" font-family="Share Tech Mono" font-size="8">EXO</text>
+        </g>
+
+        <!-- Leg augments -->
+        <g filter="url(#glowPink)">
+          <line x1="151" y1="340" x2="115" y2="340" stroke="#FF006E" stroke-width="0.8"/>
+          <text x="70" y="344" fill="#FF006E" font-family="Share Tech Mono" font-size="8">MOTO</text>
+          <line x1="209" y1="360" x2="300" y2="360" stroke="#FF006E" stroke-width="0.8"/>
+          <text x="302" y="364" fill="#FF006E" font-family="Share Tech Mono" font-size="8">SERVO</text>
+        </g>
+
+        <!-- Corner brackets on body -->
+        <g stroke="#00F5FF" stroke-width="1" fill="none" opacity="0.4">
+          <path d="M128 118 L118 118 L118 130"/>
+          <path d="M232 118 L242 118 L242 130"/>
+          <path d="M128 278 L118 278 L118 266"/>
+          <path d="M232 278 L242 278 L242 266"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- SPECS -->
+<div id="specs" style="max-width:1200px;margin:0 auto;padding:7rem 4rem;">
+  <div class="specs-header">
+    <div>
+      <div class="section-eyebrow reveal">// Performance Metrics</div>
+      <h2 class="section-title reveal">Technical<br><span class="accent-word">Specifications</span></h2>
+    </div>
+    <p class="section-body reveal">All performance values measured under standard ISO-9001-CYBORG protocols at sea level, 22°C ambient. Human baseline = 1.0×.</p>
+  </div>
+
+  <div class="specs-grid">
+    <div class="spec-card reveal">
+      <div class="spec-num">847<span class="spec-unit">%</span></div>
+      <div class="spec-name">Strength Output</div>
+      <div class="spec-desc">Peak torque amplification across all major muscle groups via myoelectric fiber weaving.</div>
+    </div>
+    <div class="spec-card reveal">
+      <div class="spec-num">12<span class="spec-unit">ms</span></div>
+      <div class="spec-name">Neural Latency</div>
+      <div class="spec-desc">Thought-to-action delay with NeuroLink Core installed. 18× faster than baseline reflex.</div>
+    </div>
+    <div class="spec-card reveal">
+      <div class="spec-num">300<span class="spec-unit">×</span></div>
+      <div class="spec-name">Visual Zoom</div>
+      <div class="spec-desc">Ocular Suite X7 optical-digital hybrid zoom with stabilization and EM overlay.</div>
+    </div>
+    <div class="spec-card reveal">
+      <div class="spec-num">50k<span class="spec-unit">h</span></div>
+      <div class="spec-name">Organ Uptime</div>
+      <div class="spec-desc">BioFusion synthetic organ cluster rated for continuous operation before scheduled service.</div>
+    </div>
+    <div class="spec-card reveal">
+      <div class="spec-num">4<span class="spec-unit">hr</span></div>
+      <div class="spec-name">Self-Repair Time</div>
+      <div class="spec-desc">Nano-mesh restoration of structural micro-fractures in ExoFrame Skeleton components.</div>
+    </div>
+    <div class="spec-card reveal">
+      <div class="spec-num">340<span class="spec-unit">%</span></div>
+      <div class="spec-name">O₂ Capacity</div>
+      <div class="spec-desc">Increased blood oxygenation via synthetic hemoglobin and turbo-compression lung assist.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASES -->
+<section id="phases">
+  <div class="phases-inner">
+    <div class="phases-header">
+      <div class="section-eyebrow reveal">// Integration Roadmap</div>
+      <h2 class="section-title reveal">Augmentation <span class="accent-word">Phases</span></h2>
+      <p class="section-body reveal" style="margin: 0 auto; text-align:center;">
+        A structured approach to full cybernetic integration — from initial consultation to complete system activation.
+      </p>
+    </div>
+
+    <div class="timeline">
+      <div class="phase-item reveal">
+        <div class="phase-dot active"></div>
+        <div class="phase-label">Phase 01</div>
+        <div class="phase-name">Neural Mapping</div>
+        <div class="phase-desc">Full cognitive and nervous system scan. Baseline bio-metrics recorded. Integration compatibility assessed.</div>
+      </div>
+      <div class="phase-item reveal">
+        <div class="phase-dot active"></div>
+        <div class="phase-label">Phase 02</div>
+        <div class="phase-name">Core Install</div>
+        <div class="phase-desc">Primary augmentation surgery. NeuroLink Core and BioFusion Organs installed under general anesthesia.</div>
+      </div>
+      <div class="phase-item reveal">
+        <div class="phase-dot"></div>
+        <div class="phase-label">Phase 03</div>
+        <div class="phase-name">Calibration</div>
+        <div class="phase-desc">System initialization and tuning. Neural pathways mapped to synthetic interfaces. HUD activated.</div>
+      </div>
+      <div class="phase-item reveal">
+        <div class="phase-dot upcoming"></div>
+        <div class="phase-label">Phase 04</div>
+        <div class="phase-name">Full Activation</div>
+        <div class="phase-desc">Complete system go-live. All augments operating at peak capacity. Welcome to post-humanity.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="enlist">
+  <div class="terminal-badge reveal">// ACCESS LEVEL: CANDIDATE</div>
+  <h2 class="cta-title reveal">Ready to<br><span class="accent-word">Transcend?</span></h2>
+  <p class="cta-body reveal">
+    Join 14,000+ subjects already operating beyond human limits. Consultation slots are strictly limited. Eligibility screening required.
+  </p>
+  <div class="cta-actions reveal">
+    <a href="#" class="btn-primary">Apply for Augmentation</a>
+    <a href="#specs" class="btn-secondary">Review Requirements</a>
+  </div>
+
+  <div class="corner-deco tl"></div>
+  <div class="corner-deco tr"></div>
+  <div class="corner-deco bl"></div>
+  <div class="corner-deco br"></div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2157 <span>NEXUS</span> Human Evolution Initiative — All augmentation rights reserved.</p>
+  <p>SYS STATUS: <span>ONLINE</span> // UPTIME: 99.997% // BUILD: v4.2.1-ALPHA</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Glitch titles randomly
+  const glitch = document.querySelector('.glitch');
+  setInterval(() => {
+    glitch.style.transform = `translateX(${Math.random() > 0.5 ? 2 : -2}px)`;
+    setTimeout(() => glitch.style.transform = '', 80);
+  }, 4000);
+
+  // Smooth nav active state
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 200) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--cyan)' : '';
+    });
+  });
+</script>
+</body>
+</html>
